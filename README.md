@@ -15,3 +15,5 @@ You will see:
 also in the available commands.
 
 sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c edX/DemoX/Demo_Course -a "accredible_secret123" -s True
+
+Also for Rolling certificate
