@@ -184,7 +184,7 @@ class CertificateGeneration(object):
                     grade_into_string =  ''.join('{}{}'.format(key, val) for key, val in grade.items())
                     payload = {"credential": { "name": course_name, "description": "course_description", "achievement_id": contents['course_id'] , "approve": approve, "grade": grade_contents, "recipient": {"name": contents['name'], "email": student.email}, "style_preference": {"distinction_url": seal_image},"evidence_items": [{"description": "Entire Grading of student", "category": "Transcript", "string_object": json.dumps(grade["section_breakdown"])}, {"description": "Final Grade in Percernt", "category": "grade", "string_object": grade['percent']}]}}
                     payload = json.dumps(payload)
-                    r = requests.post('https://staging.accredible.com/v1/credentials', payload, headers={'Authorization':'Token token=' + self.api_key, 'Content-Type':'application/json'})
+                    r = requests.post('https://api.accredible.com/v1/credentials', payload, headers={'Authorization':'Token token=' + self.api_key, 'Content-Type':'application/json'})
                     
                     if r.status_code == 200:
                        json_response = r.json()  
