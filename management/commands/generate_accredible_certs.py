@@ -87,7 +87,7 @@ class Command(BaseCommand):
             raise CommandError("You must give a api_key, if don't have one visit: https://accredible.com/issuer/sign_up")
 
         if options['styling']:
-            if options['styling'] == True: 
+            if options['styling'] == 'True': 
                 new_status = "generating"
             else:
                 raise CommandError("You must give true if want to do no styling, no any other argument")

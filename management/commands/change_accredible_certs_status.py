@@ -57,5 +57,5 @@ class Command(BaseCommand):
 
         for certificate in GeneratedCertificate.objects.filter(course_id=course_id, status="generating"):
             certificate.status = "downloadable"
-            certificate.save
+            certificate.save()
             print certificate.name
