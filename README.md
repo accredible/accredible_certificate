@@ -1,41 +1,50 @@
-Installing the repo: 
- 1) sudo git submodule add https://github.com/deependersingla/accredible_certificate   /edx/app/edxapp/edx-platform/lms/djangoapps/accredible_certificate.
- Benefit git submodule is that it add it can help in update very easily.
 
- 2) Edit lms/envs/common.py around line 1326 you will see installed apps, include accredible_certificate also there.
+### Pre-installation
+Before installing the module please visit https://accredible.com and obtain a free API key.
+
+### Installation
+To install the git submodule onto your OpenEdx instance please ensure you have your API key and then follow these steps:
+
+ 1. Locate your OpenEdx platform and navigate to **edx-platform**.
+ 2. Run `sudo git submodule add https://github.com/accredible/accredible_certificate   /edx/app/edxapp/edx-platform/lms/djangoapps/accredible_certificate`
+ 3. Still within **edx-platform**, edit lms/envs/common.py. Around line 1326 you will the *INSTALLED_APPS* section, include accredible_certificate there by adding the line: `'accredible_certificate',` and saving the updated file.
+
+Now we can check the installation by running shell commands to see if our additional functions are available. Within the **edx-plaform** directory run `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings=aws help`
  
- 3) Visit https://accredible.com/issuer/sign_up and get one API KEY, its free :)
- 
- Assuming you are on the server and changed to the /edx/app/edxapp/edx-platform directory to use manage.py
- Run shell commands to see if installation is proper: sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings=aws help
- 
- You will see:
-[accredible_certificates]
-    change_accredible_certs_status
-    generate_accredible_certs
+ Within the long list you should see the following output:
 
-also in the available commands.
+>  [accredible_certificates]
+> 	    change_accredible_certs_status
+> 	    generate_accredible_certs
 
-IF you see this then everything is fine and you are ready to generate certificate.
-Also for Rolling certificate: 
-1)  Add API key to views file in the directory around line: 31
-2) Update lms/urls.py change this line: url(r'^request_certificate$', 'certificates.views.request_certificate'), with the new_line url(r'^request_certificate$', 'accredible_certificate.views.request_certificate')
+If you'd like to generate certificates for **self-paced courses** then we need to make a few further amendments.
+
+ 1. From the **edx-platform** directory, edit lms/djangoapps/accredible_certificate/views.py
+ 2. Find `Your_API_KEY` and replace this with the API key provided via Accredible (it's around line 31). Save this updated file.
+ 3. From the **edx-platform** directory, edit lms/urls.py 
+ 4. Find the line: `url(r'^request_certificate$', 'certificates.views.request_certificate'),` and replace this line with: `url(r'^request_certificate$', 'accredible_certificate.views.request_certificate'),` and save this updated file.
+
+### Issuing Certificates
+Your account has a default template for how your certificates will appear which you can edit from your dashboard.
+
+If you'd like to issue certificates and update their appearance *before* they are published (sent to your students) then please follow the instructions in **Method A**. If you'd like to issue certificates and have them delivered directly to students without amending their appearance then please follow the instructions in **Method B**.
+
+####Method A
+To issue certificates and update their appearance *before* they are published (sent to your students):
+
+ 1. Login to your server and navigate to your **edx-platform** directory to use manage.py
+ 2. Run the command: `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c   edX/DemoX/Demo_Course -a <API_KEY> -s True` where < API_KEY > is replaced with the API key provided by Accredible and where edX/DemoX/Demo_Course is replaced by your course key.
+ 3. Go to the Accredible management console and in your account amend the certificate design to meet your requirements.
+ 4. In the Accredible management console publish the certificates and they will be delivered to your students.
+ 5. Back in your console within the **edx-platform** directory, run the command: `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws    change_accredible_certs_status -c edX/DemoX/Demo_Course`. This command pull data from the Accredible API to change the status of the certificates from *generating* to *available for download*. Your students can now view their certificates through the LMS and via their email.
 
 
-Using the Repo: Login to the server and change to the /edx/app/edxapp/edx-platform directory to use manage.py
+#####Method B
+To issue certificates and have them delivered directly to students without amending their appearance:
 
-1) Change in default styling of certifcate for a particular course:
-   a) Command: sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c   edX/DemoX/Demo_Course -a <API_KEY> -s True
-   
-   b) After this go to your Managemenrt console and desgin certificate. Click on publish. All the course students are notified        for their certificate.
+ 1. From the **edx-platform** directory run the command `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c edX/DemoX/Demo_Course -a <API_KEY>` where < API_KEY > is replaced with the API key provided by Accredible and where edX/DemoX/Demo_Course is replaced by your course key.
 
-   c) In the console command: sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws    change_accredible_certs_status -c edX/DemoX/Demo_Course This command changes status of generating certificate from generating to       download. Now student can see the Accredible certificate in lms also.
-
-2) No change in default styling from Provider level style preferences:
-   a) Just run this command: sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c edX/DemoX/Demo_Course -a <API_KEY>
-   
-For rolling Certificate no change it will work the way, they are working now, after installation. If you want to update any of the certificate visit management console or use Accredible API.
-
-For any doubt please send a email to deepender281190@gmail.com or support@accredible.com. You will get reply in no time.
+### Support
+If you have any issues, suggestions or questions then please send an email to support@accredible.com.
 
 
