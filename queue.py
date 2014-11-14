@@ -11,13 +11,14 @@ from django.conf import settings
 from requests.auth import HTTPBasicAuth
 from student.models import UserProfile, CourseEnrollment
 from verify_student.models import SoftwareSecurePhotoVerification
-
 import json
 import random
 import logging
 import lxml.html
 from lxml.etree import XMLSyntaxError, ParserError
 import requests
+from xmodule.modulestore.django import modulestore
+
 
 
 
@@ -121,6 +122,20 @@ class CertificateGeneration(object):
             self.request.session = {}
 
             course_name = course.display_name or course_id.to_deprecated_string()
+            description = ''
+            for section_key in ['short_description', 'description','overview']:
+                loc = loc = course.location.replace(category='about', name=section_key)
+                try:
+                    if modulestore().get_item(loc).data:
+                       description = modulestore().get_item(loc).data
+                       break
+                except:
+                    print "this course don't have " +section_key
+              
+            if not description:
+               description = "course_description"
+
+
             is_whitelisted = self.whitelist.filter(user=student, course_id=course_id, whitelist=True).exists()
             grade = grades.grade(student, self.request, course)
             enrollment_mode, __ = CourseEnrollment.enrollment_mode_for_user(student, course_id)
@@ -130,7 +145,7 @@ class CertificateGeneration(object):
             cert_mode = enrollment_mode
             if (mode_is_verified and not (user_is_verified and user_is_reverified)):
                 cert_mode = GeneratedCertificate.MODES.honor
-        
+            
             if forced_grade:
                 grade['grade'] = forced_grade
 
@@ -182,9 +197,9 @@ class CertificateGeneration(object):
                       approve = True
 
                     grade_into_string =  ''.join('{}{}'.format(key, val) for key, val in grade.items())
-                    payload = {"credential": { "name": course_name, "description": "course_description", "achievement_id": contents['course_id'] , "approve": approve, "grade": grade_contents, "recipient": {"name": contents['name'], "email": student.email}, "style_preference": {"distinction_url": seal_image},"evidence_items": [{"description": "Course Transcript", "category": "transcript", "string_object": json.dumps(grade["section_breakdown"])}, {"description": "Final Grade", "category": "grade", "string_object": grade['percent']}]}}
+                    payload = {"credential": { "name": course_name, "description": description, "achievement_id": contents['course_id'] , "approve": approve, "grade": grade_contents, "recipient": {"name": contents['name'], "email": student.email}, "style_preference": {"distinction_url": seal_image},"evidence_items": [{"description": "Course Transcript", "category": "transcript", "string_object": json.dumps(grade["section_breakdown"])}, {"description": "Final Grade", "category": "grade", "string_object": grade['percent']}]}}
                     payload = json.dumps(payload)
-                    r = requests.post('https://api.accredible.com/v1/credentials', payload, headers={'Authorization':'Token token=' + self.api_key, 'Content-Type':'application/json'})
+                    r = requests.post('https://staging.accredible.com/v1/credentials', payload, headers={'Authorization':'Token token=' + self.api_key, 'Content-Type':'application/json'})
                     
                     if r.status_code == 200:
                        json_response = r.json()  
