@@ -1,6 +1,11 @@
 
+### Introduction
+This module enables you to issue dynamic, digital certificates for free using the [Accredible](https://accredible.com) API on your OpenEdx LMS instance. They act as a replacement for the PDF certificates normally generated for your courses.
+
+The module has been tested in edx-platform v0.1+.
+
 ### Pre-installation
-Before installing the module please visit https://accredible.com and obtain a free API key.
+Before installing the module please visit [https://accredible.com](https://accredible.com) and obtain a free API key.
 
 ### Installation
 To install the git submodule onto your OpenEdx instance please ensure you have your API key and then follow these steps:
@@ -27,22 +32,21 @@ If you'd like to generate certificates for **self-paced courses** then we need t
 ### Issuing Certificates
 Your account has a default template for how your certificates will appear which you can edit from your dashboard.
 
-If you'd like to issue certificates and update their appearance *before* they are published (sent to your students) then please follow the instructions in **Method A**. If you'd like to issue certificates and have them delivered directly to students without amending their appearance then please follow the instructions in **Method B**.
+If you'd like to issue certificates and update their appearance *before* they are published (sent to your students) then please follow the instructions in **Method A**. If you'd like to issue certificates and have them delivered directly to students without amending their appearance then please follow the instructions in **Method B**. Both methods issue certificates for every student in the course.
 
 ####Method A
 To issue certificates and update their appearance *before* they are published (sent to your students):
 
  1. Login to your server and navigate to your **edx-platform** directory to use manage.py
- 2. Run the command: `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c   edX/DemoX/Demo_Course -a <API_KEY> -s True` where < API_KEY > is replaced with the API key provided by Accredible and where edX/DemoX/Demo_Course is replaced by your course key.
+ 2. Run the command: `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c   edX/DemoX/Demo_Course -a <API_KEY> -s True` where < API_KEY > is replaced with the API key provided by Accredible and where edX/DemoX/Demo_Course is replaced by the course key that you'd like to generate certificates for.
  3. Go to the Accredible management console and in your account amend the certificate design to meet your requirements.
  4. In the Accredible management console publish the certificates and they will be delivered to your students.
  5. Back in your console within the **edx-platform** directory, run the command: `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws    change_accredible_certs_status -c edX/DemoX/Demo_Course`. This command pull data from the Accredible API to change the status of the certificates from *generating* to *available for download*. Your students can now view their certificates through the LMS and via their email.
 
-
 ####Method B
 To issue certificates and have them delivered directly to students without amending their appearance:
 
- 1. From the **edx-platform** directory run the command `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c edX/DemoX/Demo_Course -a <API_KEY>` where < API_KEY > is replaced with the API key provided by Accredible and where edX/DemoX/Demo_Course is replaced by your course key.
+ 1. From the **edx-platform** directory run the command `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c edX/DemoX/Demo_Course -a <API_KEY>` where < API_KEY > is replaced with the API key provided by Accredible and where edX/DemoX/Demo_Course is replaced by the course key that you'd like to generate certificates for.
 
 ### Support
 If you have any issues, suggestions or questions then please send an email to support@accredible.com.
