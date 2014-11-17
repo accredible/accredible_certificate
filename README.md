@@ -41,7 +41,7 @@ To issue certificates and update their appearance *before* they are published (s
  2. Run the command: `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c   edX/DemoX/Demo_Course -a <API_KEY> -s True` where < API_KEY > is replaced with the API key provided by Accredible and where edX/DemoX/Demo_Course is replaced by the course key that you'd like to generate certificates for.
  3. Go to the Accredible management console and in your account amend the certificate design to meet your requirements.
  4. In the Accredible management console publish the certificates and they will be delivered to your students.
- 5. Back in your console within the **edx-platform** directory, run the command: `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws    change_accredible_certs_status -c edX/DemoX/Demo_Course`. This command pull data from the Accredible API to change the status of the certificates from *generating* to *available for download*. Your students can now view their certificates through the LMS and via their email.
+ 5. Back in your console within the **edx-platform** directory, run the command: `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws    change_accredible_certs_status -c edX/DemoX/Demo_Course -a <API_KEY>`. This command pull data from the Accredible API to change the status of the certificates from *generating* to *available for download*. Your students can now view their certificates through the LMS and via their email.
 
 ####Method B
 To issue certificates and have them delivered directly to students without amending their appearance:

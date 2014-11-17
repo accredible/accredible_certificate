@@ -13,6 +13,8 @@ from certificates.models import CertificateStatuses
 from certificates.models import GeneratedCertificate
 import datetime
 from pytz import UTC
+import requests
+import json
 
 
 
@@ -32,7 +34,13 @@ class Command(BaseCommand):
                     dest='course',
                     default=False,
                     help='Grade and generate certificates '
-                    'for a specific course'),    
+                    'for a specific course'),
+        make_option('-a', '--api_key',
+                    metavar='API_KEY',
+                    dest='api_key',
+                    default=None,
+                    help='API key for accredible Certificate, if don\'t have one'
+                    'Visit https://accredible.com/issuer/sign_up and get one')                
     )
 
     def handle(self, *args, **options):
@@ -52,10 +60,21 @@ class Command(BaseCommand):
             course_id = course
         else:
             raise CommandError("You must specify a course")
+
+        if options['api_key']:
+            api_key = options['api_key']
+        else:
+            raise CommandError("You must give a api_key, if don't have one visit: https://accredible.com/issuer/sign_up")
+        
+        user_emails = []
+        r = requests.get("https://staging.accredible.com/v1/credentials?achievement_id="+ course_id.to_deprecated_string() + "&&full_view=true",headers={'Authorization':'Token token=' + api_key, 'Content-Type':'application/json'})
+        for certificate in r.json()["credentials"]:
+            if certificate["approve"] == True:
+                user_emails.append(certificate["recipient"]["email"])
         
 
-
         for certificate in GeneratedCertificate.objects.filter(course_id=course_id, status="generating"):
-            certificate.status = "downloadable"
-            certificate.save()
-            print certificate.name
+            if certificate.user.email in user_emails:
+              certificate.status = "downloadable"
+              certificate.save()
+              print certificate.name
