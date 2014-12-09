@@ -67,7 +67,7 @@ class Command(BaseCommand):
             raise CommandError("You must give a api_key, if don't have one visit: https://accredible.com/issuer/sign_up")
         
         user_emails = []
-        r = requests.get("https://staging.accredible.com/v1/credentials?achievement_id="+ course_id.to_deprecated_string() + "&&full_view=true",headers={'Authorization':'Token token=' + api_key, 'Content-Type':'application/json'})
+        r = requests.get("https://api.accredible.com/v1/credentials?achievement_id="+ course_id.to_deprecated_string() + "&&full_view=true",headers={'Authorization':'Token token=' + api_key, 'Content-Type':'application/json'})
         for certificate in r.json()["credentials"]:
             if certificate["approve"] == True:
                 user_emails.append(certificate["recipient"]["email"])
