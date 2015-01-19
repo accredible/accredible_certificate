@@ -90,7 +90,7 @@ class Command(BaseCommand):
             if options['styling'] == 'True': 
                 new_status = "generating"
             else:
-                raise CommandError("You must give true if want to do no styling, no any other argument")
+                raise CommandError("You must give true if want to do styling, no any other argument")
         else:
             new_status = "downloadable"
 
