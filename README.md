@@ -1,11 +1,11 @@
 
 ### Introduction
-This module enables you to issue dynamic, digital certificates for free using the [Accredible](https://accredible.com) API on your OpenEdx LMS instance. They act as a replacement for the PDF certificates normally generated for your courses. An example output certificate can be viewed at: [https://accredible.com/example](https://accredible.com/example).
+This module enables you to issue dynamic, digital certificates using the [Accredible](https://accredible.com) API on your OpenEdx LMS instance. They act as a replacement for the PDF certificates normally generated for your courses. An example output certificate can be viewed at: [https://accredible.com/example](https://accredible.com/example).
 
 The module has been tested in edx-platform v0.1+.
 
 ### Pre-installation
-Before installing the module please visit [https://accredible.com](https://accredible.com) and obtain a free API key.
+Before installing the module please visit [https://accredible.com](https://accredible.com) and obtain a API key.
 
 ### Installation
 To install the git submodule onto your OpenEdx instance please ensure you have your API key and then follow these steps:
