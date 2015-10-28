@@ -184,20 +184,13 @@ class CertificateGeneration(object):
                         'name': profile_name,
                         'grade': grade_contents
                     }
-                    if cert_mode == "verified":
-                         seal_image = "https://s3.amazonaws.com/accredible_api_style_preferences/signature_images/37/original/open-uri20141023-10175-q5szt4"
-                    elif cert_mode == "honor":
-                         seal_image = "https://s3.amazonaws.com/accredible_api_organizations/images/8/medium/data?1414086141"
-                    else:
-                         seal_image = None
-                    
                     if defined_status == "generating":
                       approve = False
                     else:
                       approve = True
 
                     grade_into_string =  ''.join('{}{}'.format(key, val) for key, val in grade.items())
-                    payload = {"credential": { "name": course_name, "description": description, "achievement_id": contents['course_id'] , "course_link": "/courses/" +contents['course_id'] + "/about", "approve": approve, "grade": grade_contents, "recipient": {"name": contents['name'], "email": student.email}, "style_preference": {"distinction_url": seal_image},"evidence_items": [{"description": "Course Transcript", "category": "transcript", "string_object": json.dumps(grade["section_breakdown"])}, {"description": "Final Grade", "category": "grade", "string_object": grade['percent']}]}}
+                    payload = {"credential": { "name": course_name, "description": description, "achievement_id": contents['course_id'] , "course_link": "/courses/" +contents['course_id'] + "/about", "approve": approve, "template_name": contents['course_id'] ,"grade": grade_contents, "recipient": {"name": contents['name'], "email": student.email},"evidence_items": [{"description": "Course Transcript", "category": "transcript", "string_object": json.dumps(grade["section_breakdown"])}, {"description": "Final Grade", "category": "grade", "string_object": grade['percent']}]}}
                     payload = json.dumps(payload)
                     r = requests.post('https://api.accredible.com/v1/credentials', payload, headers={'Authorization':'Token token=' + self.api_key, 'Content-Type':'application/json'})
                     
