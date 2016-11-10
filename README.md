@@ -1,8 +1,20 @@
+![Accredible Logo](https://s3.amazonaws.com/accredible-cdn/accredible_logo_sm.png)
 
-### Introduction
-This module enables you to issue dynamic, digital certificates using the [Accredible](https://accredible.com) API on your OpenEdx LMS instance. They act as a replacement for the PDF certificates normally generated for your courses. An example output certificate can be viewed at: [https://accredible.com/example](https://accredible.com/example).
+# Accredible OpenEdX Module
+
+## Overview
+The Accredible platform enables organizations to create, manage and distribute digital credentials as digital certificates or open badges.
+
+An example digital certificate and badge can be viewed here: https://www.credential.net/10000005
+
+This module enables you to issue dynamic, digital certificates using the [Accredible](https://accredible.com) API on your OpenEdx LMS instance. They act as a replacement for the PDF certificates normally generated for your courses.
 
 The module has been tested in edx-platform v0.1+.
+
+## Example Output
+![Example Digital Certificate](https://s3.amazonaws.com/accredible-cdn/example-digital-certificate.png)
+
+![Example Open Badge](https://s3.amazonaws.com/accredible-cdn/example-digital-badge.png)
 
 ### Pre-installation
 Before installing the module please visit [https://accredible.com](https://accredible.com) and obtain a API key.
@@ -49,6 +61,6 @@ To issue certificates and have them delivered directly to students without amend
  1. From the **edx-platform** directory run the command `sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws generate_accredible_certs -c edX/DemoX/Demo_Course -a <API_KEY>` where < API_KEY > is replaced with the API key provided by Accredible and where edX/DemoX/Demo_Course is replaced by the course key that you'd like to generate certificates for.
 
 ### Support
-If you have any issues, suggestions or questions then please send an email to support@accredible.com.
+If you have any issues, suggestions or questions then please send an email to support@accredible.com or submit an issue to https://github.com/accredible/acms-php-api/issues
 
 
